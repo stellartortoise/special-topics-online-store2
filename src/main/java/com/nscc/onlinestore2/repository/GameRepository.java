@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
 
-//    @EntityGraph(attributePaths = {"voiceActors"})
-//    Optional<Game> findGameWithVoiceActorsById(Long id);
 }

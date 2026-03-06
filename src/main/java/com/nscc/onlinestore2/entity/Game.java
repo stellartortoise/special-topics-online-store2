@@ -40,11 +40,4 @@ public class Game {
     //@Column(nullable = false)
     private String createDate;
 
-//    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<VoiceActor> voiceActors = new ArrayList<>();
-//
-//    public void addVoiceActor(VoiceActor voiceActor) {
-//        voiceActors.add(voiceActor);
-//        voiceActor.setGame(this);
-//    }
 }
