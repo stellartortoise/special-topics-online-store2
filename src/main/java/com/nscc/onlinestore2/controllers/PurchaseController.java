@@ -34,17 +34,24 @@ public class PurchaseController {
     }
 
     // --- CREATE ---
+
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public Purchase createPurchase(@Valid @RequestBody PurchaseDTO purchaseDTO) {
-        Purchase purchase = new Purchase();
-        purchase.setStripeSessionId(purchaseDTO.getStripeSessionId());
-        purchase.setStatus("pending"); // Default to pending on creation
-        purchase.setPurchaseTotal(purchaseDTO.getPurchaseTotal());
-        purchase.setPurchaseDateTime(purchaseDTO.getPurchaseDateTime());
-
-        return purchaseService.createPurchase(purchase);
+        return purchaseService.createPurchase(purchaseDTO);
     }
+
+//    @PostMapping("/")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Purchase createPurchase(@Valid @RequestBody PurchaseDTO purchaseDTO) {
+//        Purchase purchase = new Purchase();
+//        purchase.setStripeSessionId(purchaseDTO.getStripeSessionId());
+//        purchase.setStatus("pending"); // Default to pending on creation
+//        purchase.setPurchaseTotal(purchaseDTO.getPurchaseTotal());
+//        purchase.setPurchaseDateTime(purchaseDTO.getPurchaseDateTime());
+//
+//        return purchaseService.createPurchase(purchase);
+//    }
 
     // --- UPDATE STATUS ---
     @PatchMapping("/{id}/status")

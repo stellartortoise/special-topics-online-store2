@@ -18,5 +18,6 @@ public class PurchaseDTO {
 
     private String purchaseDateTime;
 
+    @jakarta.validation.Valid
     private List<LineItemDTO> lineItems;
 }

@@ -16,6 +16,9 @@ public interface PurchaseService {
 
     Purchase createPurchase(Purchase purchase);
 
+    // create purchase overload
+    Purchase createPurchase(@Valid PurchaseDTO dto);
+
     LineItem createLineItem(LineItem lineItem);
 
     Purchase updatePurchase(long id, @Valid PurchaseDTO purchaseDTO);
