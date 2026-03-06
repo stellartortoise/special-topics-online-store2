@@ -5,10 +5,12 @@ import com.nscc.onlinestore2.entity.Purchase;
 import com.nscc.onlinestore2.repository.LineItemRepository;
 import com.nscc.onlinestore2.repository.PurchaseRepository;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class LineItemServiceImpl implements LineItemService {
 
     private final PurchaseRepository purchaseRepository;
