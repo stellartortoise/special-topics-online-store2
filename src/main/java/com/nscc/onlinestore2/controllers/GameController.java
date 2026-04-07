@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/games")
 public class GameController {
@@ -22,7 +23,7 @@ public class GameController {
     }
 
     // --- READ (All) ---
-    @GetMapping("/")
+    @GetMapping()
     public List<Game> getAllGames() { // Changed to camelCase
         return gameService.getAllGames();
     }

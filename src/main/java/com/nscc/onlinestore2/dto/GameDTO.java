@@ -19,7 +19,7 @@ public class GameDTO {
     private String Category;
 
     @NotNull
-    private double Price;
+    private Long Price;
 
     @NotNull
     @NotBlank(message = "Image is Required")

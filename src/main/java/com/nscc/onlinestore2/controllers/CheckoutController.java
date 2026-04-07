@@ -1,6 +1,9 @@
 package com.nscc.onlinestore2.controllers;
 
 
+import com.nscc.onlinestore2.dto.CartDTO;
+import com.nscc.onlinestore2.dto.CartItemDTO;
+import com.nscc.onlinestore2.entity.Game;
 import com.nscc.onlinestore2.service.GameService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -12,8 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@CrossOrigin    // enables cors
+@CrossOrigin(origins = "http://localhost:5173") // enables cors
 @RestController
 @RequestMapping("/checkout")
 public class CheckoutController {
@@ -35,36 +39,45 @@ public class CheckoutController {
     }
 
     @PostMapping("/create-checkout-session")
-    public Map<String, String> createCheckoutSession(/* Cart */) throws StripeException
+    public Map<String, String> createCheckoutSession(@RequestBody CartDTO cart) throws StripeException
     {
         String YOUR_DOMAIN = "http://localhost:5173";
 
-        SessionCreateParams params =
-                SessionCreateParams.builder()
+        SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                         .setUiMode(SessionCreateParams.UiMode.EMBEDDED)
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setReturnUrl(YOUR_DOMAIN + "/confirmation?session_id={CHECKOUT_SESSION_ID}")
-                        .addLineItem(
-                                SessionCreateParams.LineItem.builder()
-                                        .setQuantity(1L)
-                                        // Provide the exact Price ID of the product you want to sell
-                                        // .setPrice("{{PRICE_ID}}")
-                                        .setPriceData(
-                                                SessionCreateParams.LineItem.PriceData.builder()
-                                                        .setCurrency("cad")
-                                                        .setUnitAmount(2500L)
-                                                        .setProductData(
-                                                                SessionCreateParams.LineItem.PriceData.ProductData
-                                                                        .builder()
-                                                                        .setName("Video Game")
-                                                                        .build()
-                                                        )
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build();
+                        .setReturnUrl(YOUR_DOMAIN + "/confirmation?session_id={CHECKOUT_SESSION_ID}");
 
+        for (CartItemDTO cartItem : cart.getItems()) {
+            Game game = gameService.getGameById(cartItem.getId())
+                    .orElseThrow(() -> new RuntimeException("Game not found"));
+
+            //Changed price to Long from double
+            Long price = game.getPrice();
+
+            paramsBuilder.addLineItem(
+                            SessionCreateParams.LineItem.builder()
+                                    .setQuantity(cartItem.getQuantity())
+                                    // Provide the exact Price ID of the product you want to sell
+                                    // .setPrice("{{PRICE_ID}}")
+                                    .setPriceData(
+                                            SessionCreateParams.LineItem.PriceData.builder()
+                                                    .setCurrency("cad")
+                                                    .setUnitAmount(price)
+                                                    .setProductData(
+                                                            SessionCreateParams.LineItem.PriceData.ProductData
+                                                                    .builder()
+                                                                    .setName(game.getName())
+                                                                    .build()
+                                                    )
+                                                    .build()
+                                    )
+                                    .build()
+                    )
+                    .build();
+        }
+
+        SessionCreateParams params = paramsBuilder.build();
         Session session = Session.create(params);
 
         Map<String, String> map = new HashMap<>();

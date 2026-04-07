@@ -23,7 +23,7 @@ public class Game {
     private String category;
 
     @Column(nullable = false)
-    private double price;
+    private Long price;
 
     @Column(nullable = false)
     private String image;
