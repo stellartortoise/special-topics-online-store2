@@ -34,8 +34,10 @@ public class ChatConfig {
         List<Game> games = gameService.getAllGames();
         games.forEach(g -> {
             // Include movies in the catalog. Note: %s is string value, %d is number
-            prompt.append(String.format("- Title: %s. Description: %s. ESRB Rating: %s. Price: %d price.\n",
-                    g.getName(), g.getDescription(), g.getEsrbRating(), g.getPrice()));
+            double formattedPrice = g.getPrice() / 100.0;
+
+            prompt.append(String.format("- Title: %s. Description: %s. ESRB Rating: %s. Price: $%.2f.\n",
+                    g.getName(), g.getDescription(), g.getEsrbRating(), formattedPrice));
         });
 
         prompt.append("Answer customer questions based only on this catalog.");
